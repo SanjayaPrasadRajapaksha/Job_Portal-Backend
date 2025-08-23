@@ -4,7 +4,42 @@ import { deleteImage, uploadImage } from "../services/cloudinary.service.js";
 import jobPostService from "../services/jobPost.service.js";
 import { sendError, sendResponse } from "../utils/response.js";
 
+import { sendJobApplicationMail } from "../services/jobApplicationMail.service.js";
+
 const jobPostController = {
+	// Handle job application submission: receive form fields and CV, send emails
+	applyForJob: async (req, res) => {
+		try {
+			const { applicantName, applicantEmail, message, jobTitle, companyEmail, companyName } = req.body;
+			// Validate required fields
+			if (!applicantName || !applicantEmail || !jobTitle || !companyEmail || !companyName) {
+				return sendError(res, 400, "Missing required fields");
+			}
+			// Prepare CV attachment if file is present
+			let cvAttachment = null;
+			if (req.file) {
+				cvAttachment = {
+					filename: req.file.originalname,
+					content: req.file.buffer,
+					contentType: req.file.mimetype
+				};
+			}
+			// Send emails to company and job seeker
+			await sendJobApplicationMail({
+				applicantName,
+				applicantEmail,
+				message,
+				jobTitle,
+				companyEmail,
+				companyName,
+				cvAttachment
+			});
+			return sendResponse(res, 200, true, "Application submitted and emails sent successfully");
+		} catch (error) {
+			console.error('Error in applyForJob:', error);
+			return sendError(res, 500, "Error occurred while submitting application!", error?.message || error);
+		}
+	},
 	getJobPostsByCategory: async (req, res) => {
 		try {
 			const category = req.params.category;
