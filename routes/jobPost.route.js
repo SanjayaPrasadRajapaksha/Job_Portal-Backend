@@ -8,6 +8,7 @@ import jobPostController from "../controllers/jobPost.controller.js";
 
 router.post("/add", upload.single('image'), jobPostController.createJobPost);
 router.get("/all", jobPostController.getAllJobPosts);
+router.get("/all-verify", jobPostController.getAllVerifiedJobPosts);
 router.get("/category/:category", jobPostController.getJobPostsByCategory);
 router.get("/:id", jobPostController.getJobPostById);
 router.put("/update/:id", upload.single('image'), jobPostController.updateJobPost);

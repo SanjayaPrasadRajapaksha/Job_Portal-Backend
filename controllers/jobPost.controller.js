@@ -37,7 +37,7 @@ const jobPostController = {
 			let data = req.body;
 			// If selectedDistricts is sent as a string (from form-data), parse it
 			if (typeof data.selectedDistricts === 'string') {
-				try { data.selectedDistricts = JSON.parse(data.selectedDistricts); } catch {}
+				try { data.selectedDistricts = JSON.parse(data.selectedDistricts); } catch { }
 			}
 			// Handle image upload
 			if (req.file) {
@@ -65,14 +65,29 @@ const jobPostController = {
 			return sendError(res, 500, "Error occurred while adding job post!", error?.message || error);
 		}
 	},
-	getAllJobPosts: async (req, res) => {
+	getAllVerifiedJobPosts: async (req, res) => {
 		try {
 			const jobPosts = await jobPostService.getAllJobPosts();
-			return sendResponse(res, 200, true, "Job posts fetched successfully!", jobPosts);
+			// Only return verified jobs
+			const verifiedJobs = Array.isArray(jobPosts)
+				? jobPosts.filter(job => job.isVerify === true)
+				: [];
+			return sendResponse(res, 200, true, "Job posts fetched successfully!", verifiedJobs);
 		} catch (error) {
 			return sendError(res, 500, "Error occurred while fetching job posts!", error);
 		}
 	},
+	getAllJobPosts: async (req, res) => {
+		try {
+			const jobPosts = await jobPostService.getAllJobPosts();
+			// Only return verified jobs
+			
+			return sendResponse(res, 200, true, "Job posts fetched successfully!", jobPosts);
+		} catch (error) {
+			return sendError(res, 500, "Error occurred while fetching verified job posts!", error);
+		}
+	},
+
 	getJobPostById: async (req, res) => {
 		try {
 			const id = req.params.id;
@@ -89,7 +104,7 @@ const jobPostController = {
 			let data = req.body;
 			// If selectedDistricts is sent as a string (from form-data), parse it
 			if (typeof data.selectedDistricts === 'string') {
-				try { data.selectedDistricts = JSON.parse(data.selectedDistricts); } catch {}
+				try { data.selectedDistricts = JSON.parse(data.selectedDistricts); } catch { }
 			}
 			// Handle image upload
 			if (req.file) {
@@ -126,9 +141,9 @@ const jobPostController = {
 			const id = req.params.id;
 			// Get job post to delete image from Cloudinary
 			const job = await jobPostService.getJobPostById(id);
-					if (job?.imagePublicId) {
-						await deleteImage(job.imagePublicId);
-					}
+			if (job?.imagePublicId) {
+				await deleteImage(job.imagePublicId);
+			}
 			const result = await jobPostService.deleteJobPost(id);
 			if (result === 1) {
 				return sendResponse(res, 200, true, "Job post deleted successfully!");
