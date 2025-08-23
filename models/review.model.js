@@ -38,6 +38,11 @@ export const review = sequelize.define(
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
+		isVerify: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
 	},
 	{
 		tableName: "review",

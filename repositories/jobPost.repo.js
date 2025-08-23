@@ -2,6 +2,12 @@
 import { jobPost } from "../models/jobPost.model.js";
 
 const jobPostRepo = {
+	getJobPostsByCategory: async (category) => {
+		return await jobPost.findAll({ where: { category } });
+	},
+	verifyJobPost: async (id) => {
+		return await jobPost.update({ isVerify: true }, { where: { id, isVerify: false } });
+	},
 	createJobPost: async (values) => {
 		return await jobPost.create(values);
 	},

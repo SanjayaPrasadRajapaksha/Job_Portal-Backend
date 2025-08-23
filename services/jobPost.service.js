@@ -1,7 +1,22 @@
 
-import jobPostRepo from "../repositories/jobPost.repo.js";
+	import jobPostRepo from "../repositories/jobPost.repo.js";
 
 const jobPostService = {
+		getJobPostsByCategory: async (category) => {
+			try {
+				const result = await jobPostRepo.getJobPostsByCategory(category);
+				return result;
+			} catch (error) {
+				return { status: false, message: error.message };
+			}
+		},
+	verifyJobPost: async (id) => {
+		try {
+			return await jobPostRepo.verifyJobPost(id);
+		} catch (error) {
+			return { status: false, message: error.message };
+		}
+	},
 	createJobPost: async (data) => {
 		try {
 			const result = await jobPostRepo.createJobPost(data);

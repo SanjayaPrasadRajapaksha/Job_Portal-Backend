@@ -5,6 +5,33 @@ import jobPostService from "../services/jobPost.service.js";
 import { sendError, sendResponse } from "../utils/response.js";
 
 const jobPostController = {
+	getJobPostsByCategory: async (req, res) => {
+		try {
+			const category = req.params.category;
+			const jobPosts = await jobPostService.getJobPostsByCategory(category);
+			// Only return verified jobs
+			const verifiedJobs = Array.isArray(jobPosts)
+				? jobPosts.filter(job => job.isVerify === true)
+				: [];
+			return sendResponse(res, 200, true, "Job posts fetched successfully!", verifiedJobs);
+		} catch (error) {
+			return sendError(res, 500, "Error occurred while fetching job posts by category!", error);
+		}
+	},
+
+	verifyJobPost: async (req, res) => {
+		try {
+			const id = req.params.id;
+			const result = await jobPostService.verifyJobPost(id);
+			if (result[0] === 1) {
+				return sendResponse(res, 200, true, "Job post verified successfully!");
+			} else {
+				return sendError(res, 404, "Job post not found or already verified!");
+			}
+		} catch (error) {
+			return sendError(res, 500, "Error occurred while verifying job post!", error);
+		}
+	},
 	createJobPost: async (req, res) => {
 		try {
 			let data = req.body;

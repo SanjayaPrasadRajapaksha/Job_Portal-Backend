@@ -3,6 +3,28 @@ import reviewService from "../services/review.service.js";
 import { sendError, sendResponse } from "../utils/response.js";
 
 const reviewController = {
+	getVerifiedReviews: async (req, res) => {
+		try {
+			const reviews = await reviewService.getAllReviews();
+			const verified = Array.isArray(reviews) ? reviews.filter(r => r.isVerify === true) : [];
+			return sendResponse(res, 200, true, "Verified reviews fetched successfully!", verified);
+		} catch (error) {
+			return sendError(res, 500, "Error occurred while fetching verified reviews!", error);
+		}
+	},
+	verifyReview: async (req, res) => {
+		try {
+			const id = req.params.id;
+			const result = await reviewService.verifyReview(id);
+			if (result[0] === 1) {
+				return sendResponse(res, 200, true, "Review verified successfully!");
+			} else {
+				return sendError(res, 404, "Review not found or already verified!");
+			}
+		} catch (error) {
+			return sendError(res, 500, "Error occurred while verifying review!", error);
+		}
+	},
 	createReview: async (req, res) => {
 		try {
 			const data = req.body;

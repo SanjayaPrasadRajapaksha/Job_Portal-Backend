@@ -2,6 +2,9 @@
 import { review } from "../models/review.model.js";
 
 const reviewRepo = {
+	verifyReview: async (id) => {
+		return await review.update({ isVerify: true }, { where: { id, isVerify: false } });
+	},
 	createReview: async (values) => {
 		return await review.create(values);
 	},

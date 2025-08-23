@@ -83,6 +83,11 @@ export const jobPost = sequelize.define(
 			type: DataTypes.DATEONLY,
 			allowNull: false,
 		},
+		isVerify: {
+			type: DataTypes.BOOLEAN,
+			allowNull: false,
+			defaultValue: false,
+		},
 	},
 	{
 		tableName: "jobPost",

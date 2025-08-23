@@ -2,6 +2,13 @@
 import reviewRepo from "../repositories/review.repo.js";
 
 const reviewService = {
+	verifyReview: async (id) => {
+		try {
+			return await reviewRepo.verifyReview(id);
+		} catch (error) {
+			return { status: false, message: error.message };
+		}
+	},
 	createReview: async (data) => {
 		try {
 			const result = await reviewRepo.createReview(data);
