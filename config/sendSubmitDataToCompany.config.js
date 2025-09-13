@@ -1,30 +1,37 @@
-import dotenv from "dotenv";
 import nodemailer from "nodemailer";
-dotenv.config();
 
-const sendEmail = async (email, message, name) => {
+export default async function sendSubmitDataToCompany({
+  applicantName,
+  applicantEmail,
+  message,
+  jobTitle,
+  companyEmail,
+  companyName,
+  attachments = [],
+}) {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.USER_EMAIL,
+      pass: process.env.USER_PASS,
+    },
+  });
+
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: process.env.USER_EMAIL,
-        pass: process.env.USER_PASS,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.USER_EMAIL,
-      to: email,
-      subject: "Thank You for Contacting JobCore.lk",
+    const info = await transporter.sendMail({
+      from: `"JobCore.lk" <${process.env.USER_EMAIL}>`,
+      to: companyEmail,
+      replyTo: applicantEmail, // company can reply directly to applicant
+      subject: `${jobTitle}`,
       html: `
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JobCore.lk - Thank You</title>
-</head>
-<body style="margin:0; padding:0; background-color:#f0fdf4; font-family:Arial, sans-serif;">
+<title>JobCore.lk - New Application</title>
+</head><body style="margin:0; padding:0; background-color:#f0fdf4; font-family:Arial, sans-serif;">
+<body style="margin:0; padding:0; background-color:#fff8e1; font-family:Arial, sans-serif;">
 
 <!-- Main container -->
 <table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f0fdf4">
@@ -36,7 +43,7 @@ const sendEmail = async (email, message, name) => {
         
         <!-- Header / Logo -->
         <tr>
-         <td align="center" bgcolor="#bbf7d0" style="padding:30px;">
+          <td align="center" bgcolor="#bbf7d0" style="padding:30px;">
   <div style="display:inline-block; text-align:left;">
     <div style="font-size:28px; font-weight:bold; color:#004d25; position:relative; line-height:1;">
       <a href="https://jobcore.lk" target="_blank"
@@ -59,22 +66,34 @@ const sendEmail = async (email, message, name) => {
 </td>
         </tr>
 
-     <!-- Body -->
-<tr>
-  <td style="padding:30px; color:#333;">
-    <h2 style="margin:0 0 15px; color:#004d25; font-size:22px;">Hello ${name},</h2>
-    <p style="font-size:16px; line-height:1.6;">
-      Thank you for reaching out to 
-      <a href="https://jobcore.lk" target="_blank" style="color:#28a745; text-decoration:none; font-weight:bold;">
-        JobCore.lk
-      </a>. 
-      We’ve received your message, and our team will get back to you as soon as possible.
-    </p>
-  </td>
-</tr>
+        <!-- Body -->
+        <tr>
+          <td style="padding:30px; color:#333;">
+            <h2 style="margin:0 0 15px; color:#004d25; font-size:22px;">Hello,</h2>
+            <p style="font-size:16px; line-height:1.6;">
+              <strong>${applicantName}</strong> has applied for the position of <strong>${jobTitle}</strong> at <strong>${companyName}</strong>.
+            </p>
+            <p style="font-size:15px; margin-top:15px;">
+              <b>Email:</b> <a href="mailto:${applicantEmail}" style="color:#004d25; text-decoration:none;">${applicantEmail}</a><br/>
+              <b>Message:</b><br/>
+              <span style="display:inline-block; margin-top:8px; padding:12px; background:#fff8e1; border-left:4px solid #facc15; border-radius:4px; font-size:14px; color:#444; line-height:1.5;">
+                ${message || "No message provided"}
+              </span>
+            </p>
 
+ <!-- Small CTA Button -->
+<p style="margin-top:25px; text-align:center;">
+  <a href="mailto:${applicantEmail}?subject=Regarding%20${encodeURIComponent(jobTitle)}"
+     style="display:inline-block; padding:6px 14px; background-color:#004d25; color:#fff; text-decoration:none; 
+            border-radius:4px; font-weight:bold; font-size:14px; line-height:1.2; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+    Reply to Applicant
+  </a>
+</p>
 
- <!-- Motivational Tagline -->
+          </td>
+        </tr>
+
+        <!-- Motivational Tagline -->
         <tr>
           <td style="padding:20px 30px; text-align:center;">
             <p style="margin:0; font-size:15px; color:#004d25; font-style:italic; line-height:1.6;">
@@ -121,16 +140,14 @@ const sendEmail = async (email, message, name) => {
 </table>
 </body>
 </html>
+      `,
+      attachments,
+    });
 
-  `,
-    };
-
-    await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
-  } catch (error) {
-    console.error("Failed to send email:", error);
-    throw new Error("Failed to send email");
+    console.log("Company email sent:", info.response);
+    return info;
+  } catch (err) {
+    console.error("Error sending company email:", err);
+    throw err;
   }
-};
-
-export default sendEmail;
+}
