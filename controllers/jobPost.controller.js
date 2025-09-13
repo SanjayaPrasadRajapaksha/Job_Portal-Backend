@@ -1,5 +1,3 @@
-
-
 import { deleteImage, uploadImage } from "../services/cloudinary.service.js";
 import jobPostService from "../services/jobPost.service.js";
 import { sendError, sendResponse } from "../utils/response.js";

@@ -1,6 +1,7 @@
 import sendSubmitDataToCompany from '../config/sendSubmitDataToCompany.config.js';
 import sendSubmitDataToJobSeeker from '../config/sendSubmitDataToJobSeeker.config.js';
 
+
 export async function sendJobApplicationMail({
   applicantName,
   applicantEmail,

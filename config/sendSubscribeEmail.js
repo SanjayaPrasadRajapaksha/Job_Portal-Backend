@@ -66,12 +66,10 @@ const sendSubscribeEmail = async (subscriberEmail) => {
             <p style="font-size:16px; line-height:1.6;">
               🎉 Thank you for subscribing to <b style="color:#28a745;">jobCore.lk</b> You will now receive job updates, alerts, and exclusive opportunities directly to your inbox.
             </p>
-            <p style="margin-top:20px; font-size:16px; color:#555; font-style:italic;">
-              “Stay connected — your dream job is just an email away.”
-            </p>
+            
 
           <!-- Small CTA Button -->
-<p style="margin-top:15px; text-align:center;">
+<p style="margin-top:25px; text-align:center;">
   <a href="https://jobcore.lk"
      style="display:inline-block; padding:6px 14px; 
             background-color:#065f46; color:#fff; text-decoration:none; 
@@ -84,6 +82,15 @@ const sendSubscribeEmail = async (subscriberEmail) => {
           </td>
         </tr>
 
+         <!-- Motivational Tagline -->
+        <tr>
+          <td style="padding:20px 30px; text-align:center;">
+            <p style="margin:0; font-size:15px; color:#004d25; font-style:italic; line-height:1.6;">
+              “Your career growth is our priority — let’s build the future together.”
+            </p>
+          </td>
+        </tr>
+        
          <!-- Divider -->
         <tr>
           <td>

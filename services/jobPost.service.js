@@ -1,15 +1,16 @@
 
-	import jobPostRepo from "../repositories/jobPost.repo.js";
+import sendEmailToJobPostSubmit from "../config/sendEmailToJobPostSubmit.js";
+import jobPostRepo from "../repositories/jobPost.repo.js";
 
 const jobPostService = {
-		getJobPostsByCategory: async (category) => {
-			try {
-				const result = await jobPostRepo.getJobPostsByCategory(category);
-				return result;
-			} catch (error) {
-				return { status: false, message: error.message };
-			}
-		},
+	getJobPostsByCategory: async (category) => {
+		try {
+			const result = await jobPostRepo.getJobPostsByCategory(category);
+			return result;
+		} catch (error) {
+			return { status: false, message: error.message };
+		}
+	},
 	verifyJobPost: async (id) => {
 		try {
 			return await jobPostRepo.verifyJobPost(id);
@@ -20,6 +21,13 @@ const jobPostService = {
 	createJobPost: async (data) => {
 		try {
 			const result = await jobPostRepo.createJobPost(data);
+			// Send email to company after job post creation
+			if (result && result.email) {
+				await sendEmailToJobPostSubmit(result.email, {
+					jobTitle: result.title,
+					company: result.company,
+				});
+			}
 			return { status: true, message: "Job post added successfully!", result };
 		} catch (error) {
 			return { status: false, message: error.message };

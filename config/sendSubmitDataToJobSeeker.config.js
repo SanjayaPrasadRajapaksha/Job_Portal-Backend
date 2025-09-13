@@ -69,12 +69,13 @@ export default async function sendSubmitDataToJobSeeker({
         <tr>
           <td style="padding:30px; color:#333;">
             <h2 style="margin:0 0 15px; color:#004d25; font-size:22px;">Dear ${applicantName},</h2>
-            <p>
-              Thank you for applying for the position of 
-              <b>${jobTitle}</b> at <b>${companyName}</b> 
-              through <b style="color:#28a745;">jobCore.lk</b>.
-            </p>
-            <p>Below is a copy of your application for your reference:</p>
+ <p>
+  Thank you for applying for the position of 
+  <b>${jobTitle}</b> at <b>${companyName}</b> 
+  through <a href="https://jobcore.lk" target="_blank" style="color:#28a745; text-decoration:none;">jobCore.lk</a>.
+</p>
+<p>Below is a copy of your application for your reference:</p>
+
 
             ${
               message
@@ -87,10 +88,7 @@ export default async function sendSubmitDataToJobSeeker({
                 : ""
             }
 
-            <!-- Motivational Tagline -->
-            <p style="margin-top:20px; font-size:16px; color:#555; font-style:italic; text-align:center;">
-              “Your career growth is our priority — let’s build the future together.”
-            </p>
+ 
 
         <!-- Small CTA Button -->
 <p style="margin-top:15px; text-align:center;">
@@ -105,7 +103,14 @@ export default async function sendSubmitDataToJobSeeker({
 
           </td>
         </tr>
-
+                 <!-- Motivational Tagline -->
+        <tr>
+          <td style="padding:20px 30px; text-align:center;">
+            <p style="margin:0; font-size:15px; color:#004d25; font-style:italic; line-height:1.6;">
+              “Your career growth is our priority — let’s build the future together.”
+            </p>
+          </td>
+        </tr>
         <!-- Divider -->
         <tr>
           <td>
