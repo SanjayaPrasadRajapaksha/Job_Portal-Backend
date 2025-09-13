@@ -22,7 +22,7 @@ export default async function sendSubmitDataToCompany({
       from: `"JobCore.lk" <${process.env.USER_EMAIL}>`,
       to: companyEmail,
       replyTo: applicantEmail, // company can reply directly to applicant
-      subject: `New Application for ${jobTitle}`,
+      subject: `${jobTitle}`,
       html: `
 <!DOCTYPE html>
 <html lang="en">
@@ -30,11 +30,11 @@ export default async function sendSubmitDataToCompany({
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>JobCore.lk - New Application</title>
-</head>
+</head><body style="margin:0; padding:0; background-color:#f0fdf4; font-family:Arial, sans-serif;">
 <body style="margin:0; padding:0; background-color:#fff8e1; font-family:Arial, sans-serif;">
 
 <!-- Main container -->
-<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#fff8e1">
+<table width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#f0fdf4">
   <tr>
     <td align="center">
 
@@ -43,18 +43,33 @@ export default async function sendSubmitDataToCompany({
         
         <!-- Header / Logo -->
         <tr>
-          <td align="center" bgcolor="#fff9b0" style="padding:30px;">
-            <h1 style="margin:0; font-size:28px; color:#004d25; font-weight:bold;">
-              JobCore.<span style="color:#004d25;">lk</span><sup style="font-size:12px; color:#facc15;">®</sup>
-            </h1>
-            <p style="margin:8px 0 0; font-size:14px; color:#004d25;">Connecting Employers & Job Seekers</p>
-          </td>
+          <td align="center" bgcolor="#bbf7d0" style="padding:30px;">
+  <div style="display:inline-block; text-align:left;">
+    <div style="font-size:28px; font-weight:bold; color:#004d25; position:relative; line-height:1;">
+      <a href="https://jobcore.lk" target="_blank"
+         style="color:#004d25; text-decoration:none;">
+        JobCore.<span style="color:#004d25;">lk</span>
+        <sup style="font-size:12px; color:#facc15;">®</sup>
+      </a>
+    </div>
+    <!-- Half-width gradient underline -->
+    <div style="
+      height:3px;
+      width:50%;
+      max-width:85px; /* Half of 170px, adjust as needed */
+      margin-top:6px;
+      background: linear-gradient(90deg, #facc15 0%, #28a745 100%);
+      border-radius: 3px;
+    "></div>
+    <p style="margin:8px 0 0; font-size:14px; color:#004d25;">Connecting Employers & Job Seekers</p>
+  </div>
+</td>
         </tr>
 
         <!-- Body -->
         <tr>
           <td style="padding:30px; color:#333;">
-            <h2 style="margin:0 0 15px; color:#004d25; font-size:22px;">New Application for ${jobTitle}</h2>
+            <h2 style="margin:0 0 15px; color:#004d25; font-size:22px;">Hello,</h2>
             <p style="font-size:16px; line-height:1.6;">
               <strong>${applicantName}</strong> has applied for the position of <strong>${jobTitle}</strong> at <strong>${companyName}</strong>.
             </p>
@@ -66,14 +81,15 @@ export default async function sendSubmitDataToCompany({
               </span>
             </p>
 
-            <!-- CTA Button -->
-            <p style="margin-top:25px;">
-              <a href="mailto:${applicantEmail}?subject=Regarding%20${encodeURIComponent(
-        jobTitle
-      )}" style="display:inline-block; padding:12px 25px; background-color:#004d25; color:#fff; text-decoration:none; border-radius:5px; font-weight:bold;">
-                Reply to Applicant
-              </a>
-            </p>
+ <!-- Small CTA Button -->
+<p style="margin-top:25px; text-align:center;">
+  <a href="mailto:${applicantEmail}?subject=Regarding%20${encodeURIComponent(jobTitle)}"
+     style="display:inline-block; padding:6px 14px; background-color:#004d25; color:#fff; text-decoration:none; 
+            border-radius:4px; font-weight:bold; font-size:14px; line-height:1.2; box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+    Reply to Applicant
+  </a>
+</p>
+
           </td>
         </tr>
 
