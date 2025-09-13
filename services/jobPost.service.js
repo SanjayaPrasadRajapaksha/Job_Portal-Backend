@@ -1,4 +1,4 @@
-
+import sendVerifyEmailToCompany from "../config/sendVerifyEmailToCompany.js";
 import sendEmailToJobPostSubmit from "../config/sendEmailToJobPostSubmit.js";
 import jobPostRepo from "../repositories/jobPost.repo.js";
 
@@ -13,6 +13,13 @@ const jobPostService = {
 	},
 	verifyJobPost: async (id) => {
 		try {
+			const result = await jobPostRepo.getJobPostById(id);
+			if (!result) return { status: false, message: "Job post not found!" };
+			await sendVerifyEmailToCompany(result.email, {
+				jobTitle: result.title,
+				company: result.company,
+			});
+			// Update isVerify to true
 			return await jobPostRepo.verifyJobPost(id);
 		} catch (error) {
 			return { status: false, message: error.message };
